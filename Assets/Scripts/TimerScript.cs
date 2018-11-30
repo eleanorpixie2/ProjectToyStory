@@ -11,6 +11,8 @@ public class TimerScript : MonoBehaviour {
     public float increment = 0;
     public bool GameStart = false;
     public bool TimerStart = false;
+    public StatManager Stat;
+
 	// Use this for initialization
 	void Start () {
         GameStart = true;
@@ -30,7 +32,12 @@ public class TimerScript : MonoBehaviour {
 
         if (timeleft <= 0)
         {
-            SceneManager.LoadScene(0);
+            Stat.currentRound++;
+            if(Stat.currentRound>3)
+            {
+                //gameover code goes here
+            }
+            GetComponent<Image>().Compare();
         }
 	}
 

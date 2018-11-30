@@ -22,20 +22,32 @@ public class ChoiceController : MonoBehaviour {
     //Which player
     public int playerNum;
 
-	// Use this for initialization
-	void Start () {
+    public bool player1Choosing;
+    public bool player2Choosing;
+
+    public bool player1Done;
+    public bool player2Done;
+
+    // Use this for initialization
+    void Start () {
         madeChoice = new List<bool>(4);
-	}
+        player1Choosing = false;
+        player2Choosing = false;
+        player1Done=false;
+        player2Done=false;
+}
 	
 	// Update is called once per frame
 	void Update () {
         //execute code based on which player it is
-		if(playerNum==1)
+		if(playerNum==1&&!player1Choosing)
         {
+            player1Choosing = true;
             Choose1();
         }
-        else if(playerNum==2)
+        else if(playerNum==2&&!player2Choosing)
         {
+            player2Choosing = true;
             Choose2();
         }
 	}
@@ -128,6 +140,7 @@ public class ChoiceController : MonoBehaviour {
                         if (playerSelect1 != 0)
                         {
                             madeChoice[i] = true;
+                            player1Done = true;
                         }
                         break;
 
@@ -214,6 +227,7 @@ public class ChoiceController : MonoBehaviour {
                         }
                         if (playerSelect2 != 0)
                         {
+                            player2Done = true;
                             madeChoice[i] = true;
                         }
                         break;
