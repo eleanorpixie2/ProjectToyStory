@@ -34,10 +34,11 @@ public class Image : MonoBehaviour {
 		if(Player1.player1Done&&Player2.player2Done)
         {
             scores.currentRound++;
+            TimerScript.GameStart = false;
             Compare();
             if (scores.currentRound>3)
             {
-                //game over code here
+                SceneManagement.Win();
             }
             StartCoroutine(Timer());
 
@@ -125,6 +126,8 @@ public class Image : MonoBehaviour {
         FlashImage();
         Player1.player1Choosing = false;
         Player2.player2Choosing = false;
+        Player1.player1Done = false;
+        Player2.player2Done = false;
     }
 
     //timer for flash
@@ -134,5 +137,6 @@ public class Image : MonoBehaviour {
         combinations[index].SetActive(false);
         Player1.gameObject.SetActive(true);
         Player2.gameObject.SetActive(true);
+        TimerScript.GameStart = true;
     }
 }
