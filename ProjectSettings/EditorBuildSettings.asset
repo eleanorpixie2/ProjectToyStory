@@ -6,6 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/TessWorkScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/OptionsMenu.unity
+    guid: 522640f9cc814c14987256959b025d29
+  - enabled: 1
+    path: Assets/Scenes/Tutorial.unity
+    guid: 69d88a0b131d9a949992697de1e7057e
+  - enabled: 1
+    path: Assets/Scenes/StartMenu.unity
+    guid: 9efd43300a22f50468c23d8266f7c249
+  - enabled: 1
+    path: Assets/Scenes/CreditsScene.unity
+    guid: cb68445c7f2fbd24daf5342dc328d85f
   m_configObjects: {}
