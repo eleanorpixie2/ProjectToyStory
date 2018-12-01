@@ -37,18 +37,26 @@ public class ChoiceController : MonoBehaviour
     {
         player1Choosing = true;
         choosing = true;
+        
     }
 
     private float prevPlayerSelect1;
+    GameObject image;
     // Update is called once per frame
     void Update()
     {
         playerChoose1 = Input.GetAxis("Player1Choice");
         playerSelect1 = Input.GetKeyDown("joystick 1 button 0");
+        image = GameObject.FindGameObjectWithTag("Image");
+        
         //execute code based on which player it is
         if (player1Choosing)
         {
-            if(!selectedHead1&&!selectedArms1&&!selectedLegs1&&!selectedTorso1)
+            if (image != null)
+            {
+                image.SetActive(false);
+            }
+            if (!selectedHead1&&!selectedArms1&&!selectedLegs1&&!selectedTorso1)
             {
                 Choose1Head();
                 Debug.Log(selectedArms1);
