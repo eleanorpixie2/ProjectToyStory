@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Image : MonoBehaviour {
 
@@ -11,12 +12,18 @@ public class Image : MonoBehaviour {
     public float timeForFlash;
 
     public ChoiceController Player1;
-    public ChoiceController Player2;
+    public ChoiceController2 Player2;
 
     public StatManager scores;
 
     int player1Score;
     int player2Score;
+
+    public Text player1;
+    public Text player2;
+
+    public static bool player1Done;
+    public static bool player2Done;
 
     int index;
 
@@ -25,33 +32,38 @@ public class Image : MonoBehaviour {
 
         Player1.gameObject.SetActive(false);
         Player2.gameObject.SetActive(false);
-
+        player1Done = false;
+        player2Done = false;
         FlashImage();
     }
 	
 	// Update is called once per frame
 	void Update () {
-		if(Player1.player1Done&&Player2.player2Done)
+        player1.text = "Score: " + scores.player1TotalScore;
+        player2.text = "Score: " + scores.player2TotalScore;
+        if (player1Done && player2Done)
         {
             scores.currentRound++;
             TimerScript.GameStart = false;
             Compare();
-            if (scores.currentRound>3)
+            if (scores.currentRound > 3)
             {
                 SceneManagement.Win();
             }
             StartCoroutine(Timer());
 
             FlashImage();
-            Player1.player1Choosing = false;
-            Player2.player2Choosing = false;
-            Player1.player1Done = false;
-            Player2.player2Done = false;
+            Player1.player1Choosing = true;
+            Player2.player2Choosing = true;
+            player1Done = false;
+            player2Done = false;
         }
-	}
+    }
 
     public void FlashImage()
     {
+        Player1.gameObject.SetActive(false);
+        Player2.gameObject.SetActive(false);
         index = GetRandomNumber();
         combinations[index].SetActive(true);
         StartCoroutine(Timer());
@@ -67,8 +79,10 @@ public class Image : MonoBehaviour {
 
     public void Compare()
     {
+        Player1.player1Choosing = false;
+        Player2.player2Choosing = false;
         //Player 1 comparisions
-        if(Player1.GetComponent<BodyParts>().Head.sprite.Equals(combinations[index].GetComponent<BodyParts>().Head.sprite))
+        if (Player1.GetComponent<BodyParts>().Head.sprite.Equals(combinations[index].GetComponent<BodyParts>().Head.sprite))
         {
             player1Score++;
         }
@@ -123,11 +137,14 @@ public class Image : MonoBehaviour {
 
         StartCoroutine(Timer());
         //reset for next round
+        player1Done = false;
+        player2Done = false;
+        Player1.ResetChoices1();
+        Player2.ResetChoices2();
         FlashImage();
-        Player1.player1Choosing = false;
-        Player2.player2Choosing = false;
-        Player1.player1Done = false;
-        Player2.player2Done = false;
+        Player1.player1Choosing = true;
+        Player2.player2Choosing = true;
+
     }
 
     //timer for flash
@@ -137,6 +154,7 @@ public class Image : MonoBehaviour {
         combinations[index].SetActive(false);
         Player1.gameObject.SetActive(true);
         Player2.gameObject.SetActive(true);
+        TimerScript.ResetTimer();
         TimerScript.GameStart = true;
     }
 }
