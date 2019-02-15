@@ -22,6 +22,9 @@ public class ChoiceController : MonoBehaviour
 
     int index1 = 0;
 
+    int delay = 15;
+    int updateDelay = 0;
+
     bool choosing;
 
     bool selectedHead1 = false;
@@ -31,6 +34,8 @@ public class ChoiceController : MonoBehaviour
 
     float playerChoose1;
     bool playerSelect1;
+    float playerChooseKey1;
+    bool playerSelectKey1;
 
     // Use this for initialization
     void Start()
@@ -47,6 +52,8 @@ public class ChoiceController : MonoBehaviour
     {
         playerChoose1 = Input.GetAxis("Player1Choice");
         playerSelect1 = Input.GetKeyDown("joystick 1 button 0");
+        playerChooseKey1 = Input.GetAxis("Horizontal");
+        playerSelectKey1 = Input.GetKeyDown("right ctrl");
         image = GameObject.FindGameObjectWithTag("Image");
         
         //execute code based on which player it is
@@ -56,30 +63,40 @@ public class ChoiceController : MonoBehaviour
             {
                 image.SetActive(false);
             }
-            if (!selectedHead1&&!selectedArms1&&!selectedLegs1&&!selectedTorso1)
+            if (!selectedHead1 && !selectedArms1 && !selectedLegs1 && !selectedTorso1 && choosing)
             {
                 Choose1Head();
-                Debug.Log(selectedArms1);
 
             }
-            else if (selectedHead1 && !selectedArms1 && !selectedLegs1 && !selectedTorso1)
+            else if (selectedHead1 && !selectedArms1 && !selectedLegs1 && !selectedTorso1 && choosing)
             {
                 Choose1Arms();
-                Debug.Log(selectedArms1);
             }
-            else if (selectedHead1 && selectedArms1 && !selectedLegs1 && !selectedTorso1)
+            else if (selectedHead1 && selectedArms1 && !selectedLegs1 && !selectedTorso1 && choosing)
             {
                 Choose1Torso();
             }
-            else if (selectedHead1 && selectedArms1 && !selectedLegs1 && selectedTorso1)
+            else if (selectedHead1 && selectedArms1 && !selectedLegs1 && selectedTorso1 && choosing)
             {
                 Choose1Legs();
+            }
+            else if (!choosing)
+            {
+                if (updateDelay != delay)
+                {
+                    updateDelay++;
+                }
+                else
+                {
+                    updateDelay = 0;
+                    choosing = true;
+                }
             }
             else if (selectedHead1 && selectedArms1 && selectedLegs1 && selectedTorso1)
             {
                 Image.player1Done = true;
                 player1Choosing = false;
-                
+
             }
         }
         
@@ -103,20 +120,20 @@ public class ChoiceController : MonoBehaviour
     void Choose1Head()
     {
 
-        if (playerChoose1 > 0 && index1 != 5 && choosing)
+        if (playerChoose1 > 0 || playerChooseKey1 > 0 && index1 != 5 && choosing)
         {
             choosing = false;
             DelayPlus();
             _Head.GetComponent<SpriteRenderer>().sprite = Head[index1];
 
         }
-        else if (playerChoose1 < 0 && index1 != 0 && choosing)
+        else if (playerChoose1 < 0 || playerChooseKey1 < 0 && index1 != 0 && choosing)
         {
             choosing = false;
             DelayMinus();
             _Head.GetComponent<SpriteRenderer>().sprite = Head[index1];
         }
-        if (playerSelect1)
+        if (playerSelect1 || playerSelectKey1)
         {
                 selectedHead1 = true;
         }
@@ -125,20 +142,20 @@ public class ChoiceController : MonoBehaviour
     void Choose1Arms()
     {
 
-        if (playerChoose1 > 0 && index1 != 5 && choosing)
+        if (playerChoose1 > 0 || playerChooseKey1 > 0 && index1 != 5 && choosing)
         {
             choosing = false;
             DelayPlus();
             _Arm.GetComponent<SpriteRenderer>().sprite = Arm[index1];
 
         }
-        else if (playerChoose1 < 0 && index1 != 0 && choosing)
+        else if (playerChoose1 < 0 || playerChooseKey1 < 0 && index1 != 0 && choosing)
         {
             choosing = false;
             DelayMinus();
             _Arm.GetComponent<SpriteRenderer>().sprite = Arm[index1];
         }
-        if (playerSelect1)
+        if (playerSelect1 || playerSelectKey1)
         {
                 selectedArms1 = true;
         }
@@ -147,20 +164,20 @@ public class ChoiceController : MonoBehaviour
     void Choose1Torso()
     {
 
-        if (playerChoose1 > 0 && index1 != 5 && choosing)
+        if (playerChoose1 > 0 || playerChooseKey1 > 0 && index1 != 5 && choosing)
         {
             choosing = false;
             DelayPlus();
             _Torso.GetComponent<SpriteRenderer>().sprite = Torso[index1];
 
         }
-        else if (playerChoose1 < 0 && index1 != 0 && choosing)
+        else if (playerChoose1 < 0 || playerChooseKey1 < 0 && index1 != 0 && choosing)
         {
             choosing = false;
             DelayMinus();
             _Torso.GetComponent<SpriteRenderer>().sprite = Torso[index1];
         }
-        if (playerSelect1)
+        if (playerSelect1 || playerSelectKey1)
         {
                 selectedTorso1 = true;
 
@@ -172,20 +189,20 @@ public class ChoiceController : MonoBehaviour
     void Choose1Legs()
     {
 
-        if (playerChoose1 > 0 && index1 != 5 && choosing)
+        if (playerChoose1 > 0 || playerChooseKey1 > 0 && index1 != 5 && choosing)
         {
             choosing = false;
             DelayPlus();
             _Leg.GetComponent<SpriteRenderer>().sprite = Leg[index1];
 
         }
-        else if (playerChoose1 < 0 && index1 != 0 && choosing)
+        else if (playerChoose1 < 0 || playerChooseKey1 < 0 && index1 != 0 && choosing)
         {
             choosing = false;
             DelayMinus();
             _Leg.GetComponent<SpriteRenderer>().sprite = Leg[index1];
         }
-        if (playerSelect1)
+        if (playerSelect1 || playerSelectKey1)
         {
 
                 selectedLegs1 = true;
@@ -198,23 +215,13 @@ public class ChoiceController : MonoBehaviour
     void DelayPlus()
     {
         index1++;
-        for(float i=10f; i>=0; i-=Time.deltaTime)
-        {
-            choosing = false;
-            Debug.Log(i);
-        }
-        choosing = true;
+
 
     }
     void DelayMinus()
     {
         index1--;
-        for (float i = 10f; i >= 0; i -= Time.deltaTime)
-        {
-            choosing = false;
-            Debug.Log(i);
-        }
-        choosing = true;
+
     }
 
 }

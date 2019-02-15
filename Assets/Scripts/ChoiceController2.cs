@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChoiceController2 : MonoBehaviour {
+public class ChoiceController2 : MonoBehaviour
+{
 
     //Art for each limb
     public List<Sprite> Head;
@@ -17,7 +18,15 @@ public class ChoiceController2 : MonoBehaviour {
     public GameObject _Leg;
 
 
-    //Which player
+    public bool player2Choosing;
+
+    int index2 = 0;
+
+    int delay = 25;
+    int updateDelay = 0;
+
+    bool choosing;
+
     bool selectedHead2 = false;
     bool selectedArms2 = false;
     bool selectedLegs2 = false;
@@ -26,49 +35,72 @@ public class ChoiceController2 : MonoBehaviour {
     float playerChoose2;
     bool playerSelect2;
 
-    public bool player2Choosing;
-
-    bool choosing;
-
-    int index2 = 0;
+    float playerChooseKey2;
+    bool playerSelectKey2;
 
     // Use this for initialization
     void Start()
     {
         player2Choosing = true;
         choosing = true;
+
     }
 
+    private float prevPlayerSelect2;
+    GameObject image;
     // Update is called once per frame
     void Update()
     {
         playerChoose2 = Input.GetAxis("Player2Choice");
         playerSelect2 = Input.GetKeyDown("joystick 2 button 0");
+        playerChooseKey2 = Input.GetAxis("Horizontal1");
+        playerSelectKey2 = Input.GetKeyDown("left ctrl");
+        image = GameObject.FindGameObjectWithTag("Image");
+
         //execute code based on which player it is
         if (player2Choosing)
         {
-            if (!selectedHead2 && !selectedArms2 && !selectedLegs2 && !selectedTorso2)
+            if (image != null)
+            {
+                image.SetActive(false);
+            }
+            if (!selectedHead2 && !selectedArms2 && !selectedLegs2 && !selectedTorso2 && choosing)
             {
                 Choose2Head();
+
             }
-            else if (selectedHead2 && !selectedArms2 && !selectedLegs2 && !selectedTorso2)
+            else if (selectedHead2 && !selectedArms2 && !selectedLegs2 && !selectedTorso2 && choosing)
             {
                 Choose2Arms();
             }
-            else if (selectedHead2 && selectedArms2 && !selectedLegs2 && !selectedTorso2)
+            else if (selectedHead2 && selectedArms2 && !selectedLegs2 && !selectedTorso2 && choosing)
             {
                 Choose2Torso();
             }
-            else if (selectedHead2 && selectedArms2 && !selectedLegs2 && selectedTorso2)
+            else if (selectedHead2 && selectedArms2 && !selectedLegs2 && selectedTorso2 && choosing)
             {
                 Choose2Legs();
+            }
+            else if (!choosing)
+            {
+                if (updateDelay != delay)
+                {
+                    updateDelay++;
+                }
+                else
+                {
+                    updateDelay = 0;
+                    choosing = true;
+                }
             }
             else if (selectedHead2 && selectedArms2 && selectedLegs2 && selectedTorso2)
             {
                 Image.player2Done = true;
                 player2Choosing = false;
+
             }
         }
+
     }
 
     public void ResetChoices2()
@@ -85,27 +117,24 @@ public class ChoiceController2 : MonoBehaviour {
     }
 
 
-    bool choice = false;
     //player 2's code
     void Choose2Head()
     {
 
-        if (playerChoose2 > 0 && index2 != 5 && choosing)
+        if (playerChoose2 > 0 || playerChooseKey2 > 0 && index2 != 5 && choosing)
         {
             choosing = false;
             DelayPlus();
             _Head.GetComponent<SpriteRenderer>().sprite = Head[index2];
 
-
         }
-        else if (playerChoose2 < 0 && index2 != 0 && choosing)
+        else if (playerChoose2 < 0 || playerChooseKey2 < 0 && index2 != 0 && choosing)
         {
             choosing = false;
             DelayMinus();
             _Head.GetComponent<SpriteRenderer>().sprite = Head[index2];
-          
         }
-        if (playerSelect2)
+        if (playerSelect2 || playerSelectKey2)
         {
             selectedHead2 = true;
         }
@@ -114,23 +143,21 @@ public class ChoiceController2 : MonoBehaviour {
     void Choose2Arms()
     {
 
-
-        if (playerChoose2 > 0 && index2 != 5 && choosing)
+        if (playerChoose2 > 0 || playerChooseKey2 > 0 && index2 != 5 && choosing)
         {
             choosing = false;
             DelayPlus();
             _Arm.GetComponent<SpriteRenderer>().sprite = Arm[index2];
 
         }
-        else if (playerChoose2 < 0 && index2 != 0 && choosing)
+        else if (playerChoose2 < 0 || playerChooseKey2 < 0 && index2 != 0 && choosing)
         {
             choosing = false;
             DelayMinus();
             _Arm.GetComponent<SpriteRenderer>().sprite = Arm[index2];
         }
-        if (playerSelect2)
+        if (playerSelect2 || playerSelectKey2)
         {
-
             selectedArms2 = true;
         }
 
@@ -138,22 +165,21 @@ public class ChoiceController2 : MonoBehaviour {
     void Choose2Torso()
     {
 
-        if (playerChoose2 > 0 && index2 != 5 && choosing)
+        if (playerChoose2 > 0 || playerChooseKey2 > 0 && index2 != 5 && choosing)
         {
             choosing = false;
             DelayPlus();
             _Torso.GetComponent<SpriteRenderer>().sprite = Torso[index2];
 
         }
-        else if (playerChoose2 < 0 && index2 != 0 && choosing)
+        else if (playerChoose2 < 0 || playerChooseKey2 < 0 && index2 != 0 && choosing)
         {
             choosing = false;
             DelayMinus();
             _Torso.GetComponent<SpriteRenderer>().sprite = Torso[index2];
         }
-        if (playerSelect2)
+        if (playerSelect2 || playerSelectKey2)
         {
-
             selectedTorso2 = true;
 
         }
@@ -164,24 +190,23 @@ public class ChoiceController2 : MonoBehaviour {
     void Choose2Legs()
     {
 
-        if (playerChoose2 > 0 && index2 != 5 && choosing)
+        if (playerChoose2 > 0 || playerChooseKey2 > 0 && index2 != 5 && choosing)
         {
             choosing = false;
             DelayPlus();
             _Leg.GetComponent<SpriteRenderer>().sprite = Leg[index2];
 
         }
-        else if (playerChoose2 < 0 && index2 != 0 && choosing)
+        else if (playerChoose2 < 0 || playerChooseKey2 < 0 && index2 != 0 && choosing)
         {
             choosing = false;
             DelayMinus();
             _Leg.GetComponent<SpriteRenderer>().sprite = Leg[index2];
         }
-        if (playerSelect2)
+        if (playerSelect2 || playerSelectKey2)
         {
 
             selectedLegs2 = true;
-
         }
 
 
@@ -191,23 +216,16 @@ public class ChoiceController2 : MonoBehaviour {
     void DelayPlus()
     {
         index2++;
-        for (float i = 10f; i >= 0; i -= Time.deltaTime)
-        {
-            choosing = false;
-            Debug.Log(i);
-        }
-        choosing = true;
+
 
     }
     void DelayMinus()
     {
         index2--;
-        for (float i = 10f; i >= 0; i -= Time.deltaTime)
-        {
-            choosing = false;
-            Debug.Log(i);
-        }
-        choosing = true;
+
     }
 
 }
+
+
+

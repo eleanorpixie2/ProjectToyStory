@@ -57,7 +57,7 @@ public class SceneManagement : MonoBehaviour
     //loads instructions
     void TaskOnClick()
     {
-        SceneManager.LoadScene("Tutorial");
+        SceneManager.LoadScene("Level1");
     }
 
     //exits game
